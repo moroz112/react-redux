@@ -5,21 +5,9 @@ import { createStore } from 'redux';
 import App from './App';
 import './index.css';
 
-const initialState = [
-  'Smells like spirit',
-  'Enter sandman'
-];
-function playlist(state = initialState, action) {
-    if(action.type){
-        return [
-            ...state,
-            action.payload
-        ]
-    }
-    return state
-}
+import reducers from './reducers';
 
-const store = createStore(playlist);
+const store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
     <Provider store={store}>
