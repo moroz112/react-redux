@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getTracks } from './actions/tracks';
+import Menu from './Menu';
 
 class App extends Component {
 
@@ -15,6 +16,7 @@ class App extends Component {
     console.log('State of store', this.props.testStore);
     return (
         <div>
+            <Menu/>
             <div>
               <input type="text" placeholder="new track" ref={(input) => {this.trackInput = input}}/>
               <button className="addTrack" onClick={this.addTrack.bind(this)}>add Track</button>

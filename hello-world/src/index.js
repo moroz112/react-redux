@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import App from './App';
+import About from './About';
 import './index.css';
-import { Router, Route, hashHistory } from 'react-router';
+import { HashRouter, Route, Link } from 'react-router-dom';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
@@ -14,7 +15,12 @@ const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))
 
 ReactDOM.render(
     <Provider store={store}>
-    <App/>
+        <HashRouter>
+            <div>
+                <Route path="/home" component={App}></Route>
+                <Route path="/about" component={About}></Route>
+            </div>
+        </HashRouter>
     </Provider>,
   document.getElementById('root')
 );
