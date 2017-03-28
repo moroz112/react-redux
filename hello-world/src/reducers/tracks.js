@@ -1,4 +1,6 @@
-const initialState = [];
+const initialState = [
+    {name: 'My first track', id: 1234}
+];
 
 function tracks(state = initialState, action) {
     if(action.type == "ADD_TRACK"){

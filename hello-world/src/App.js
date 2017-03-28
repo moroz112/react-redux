@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getTracks } from './actions/tracks';
 import Menu from './Menu';
+import { Link } from 'react-router';
 
 class App extends Component {
 
@@ -14,6 +15,7 @@ class App extends Component {
   }
   render() {
     console.log('State of store', this.props.testStore);
+    console.log('ownProps', this.props.ownProps);
     return (
         <div>
             <Menu/>
@@ -22,7 +24,9 @@ class App extends Component {
               <button className="addTrack" onClick={this.addTrack.bind(this)}>add Track</button>
               <ul>
                 {this.props.testStore.map((track, index) =>
-                <li key={index}>{track.name}</li>
+                <li key={index}>
+                    <Link to={`/tracks/${track.id}`}>{track.name}</Link>
+                    </li>
                 )}
               </ul>
             </div>
@@ -38,8 +42,9 @@ class App extends Component {
   }
 }
 export default connect(
-    state => ({
-      testStore: state.tracks.filter(track => track.name.includes(state.filter))
+    (state, ownProps) => ({
+      testStore: state.tracks.filter(track => track.name.includes(state.filter)),
+      ownProps
     }),
     dispatch => ({
       onAddTrack: (name) => {
