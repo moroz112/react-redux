@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-export default class App extends Component {
+class App extends Component {
   render() {
-    return <div>Привет из App</div>
+    const user = this.props.user;
+    return <div>Привет из App you {user.name}</div>
   }
 }
+
+function mapStatesToProp(state) {
+  return {
+    user: state
+  }
+}
+export default connect(mapStatesToProp)(App)
