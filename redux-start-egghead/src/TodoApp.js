@@ -1,10 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Footer from './components/Footer'
 
 class TodoApp extends Component {
     constructor(props) {
         super(props);
         this.todoId = 0;
+    }
+    getVisibleTodos(filter, todos) {
+        switch(filter) {
+            case "SHOW_ALL":
+                return todos;
+            case "SHOW_ACTIVE":
+                return todos.filter( t => !t.completed);
+            case "SHOW_COMPLETED":
+                return todos.filter( t => t.completed);
+            default:
+                return todos
+        }
     }
     addTodo() {
         this.props.onAddTodo(this.input.value, this.todoId);
@@ -15,6 +28,7 @@ class TodoApp extends Component {
         this.props.onToggleTodo(id)
     }
     render() {
+        const visibleTodos = this.getVisibleTodos(this.props.testStore.visibilityFilter, this.props.testStore.todos);
         console.log('rend', this.props.testStore);
         return (
             <div>
@@ -22,12 +36,15 @@ class TodoApp extends Component {
                     this.input = node
                 }}/>
                 <button onClick={this.addTodo.bind(this)}>click</button>
-                {this.props.testStore.todos.map( (todo, index) =>
+                {visibleTodos.map( (todo, index) =>
                     <li key={todo.id}
                     onClick={this.toggleTodo.bind(this, todo.id)} style={{
                         textDecoration: todo.completed ? 'line-through' : 'none'
                     }}>{todo.text}</li>
                 )}
+                <Footer setVisibilityFilter={this.props.setVisibilityFilter}>
+
+                </Footer>
             </div>
         )
     }
