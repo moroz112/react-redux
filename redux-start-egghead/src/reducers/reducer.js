@@ -1,0 +1,54 @@
+const INITIAL_FETCH_PHOTO_STATE = {photos: ['one photo'], isLoading: false};
+
+const todo = (state, action) => {
+    switch(action.type) {
+        case 'ADD_TODO':
+            return {
+                id: action.id,
+                text: action.text,
+                completed: false
+            };
+        case 'TOGGLE_TODO':
+            if(state.id !== action.id) {
+                return state
+            }
+            return {
+                ...state,
+                completed: !state.completed
+            };
+        default:
+            return state
+    }
+};
+
+export const fetchPhotos = (state = INITIAL_FETCH_PHOTO_STATE, action) => {
+    switch(action.type) {
+        case "START_FETCHING":
+            return Object.assign({},state, {isLoading: true});
+        case "FINISH_FETCHING":
+            return Object.assign({},state, action.payload);
+        default:
+            return state
+    }
+}
+export const visibilityFilter = (state = 'SHOW_ALL', action) => {
+    switch(action.type) {
+        case 'SET_VISIBILITY_FILTER':
+            return action.filter;
+        default:
+            return state
+    }
+}
+export const todos = (state = [], action) => {
+    switch (action.type) {
+        case 'ADD_TODO':
+            return [
+                ...state,
+                todo(undefined, action)
+            ];
+        case 'TOGGLE_TODO':
+            return state.map(t => todo(t, action));
+        default:
+            return state
+    }
+}
