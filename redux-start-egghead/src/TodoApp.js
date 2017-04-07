@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Footer from './components/Footer'
+import { loadState } from './localStorage'
+import { v4 } from 'node-uuid';
+import { toggleTodo } from './actions/TooggleTodo';
+import { getPhotos } from './actions/getPhotos';
+
+
 
 class TodoApp extends Component {
     constructor(props) {
         super(props);
-        this.todoId = 0;
     }
     getVisibleTodos(filter, todos) {
         switch(filter) {
@@ -19,17 +24,29 @@ class TodoApp extends Component {
                 return todos
         }
     }
+    shouldComponentUpdate(nextProps, nextState) {
+        console.log('nextProps', nextProps);
+        console.log('nextState', nextState);
+
+        return true
+    }
+    componentWillUpdate(nextProps, nextState) {
+        console.log('nextProps will update', nextProps)
+    }
     addTodo() {
-        this.props.onAddTodo(this.input.value, this.todoId);
+        this.props.onAddTodo(this.input.value);
         this.input.value = '';
-        this.todoId++;
     }
     toggleTodo(id) {
         this.props.onToggleTodo(id)
     }
     render() {
-        const visibleTodos = this.getVisibleTodos(this.props.testStore.visibilityFilter, this.props.testStore.todos);
+        const { photos, isLoading } = this.props.testStore.fetchPhotos;
+        const persistedState = loadState();
+        const visibleTodos = this.getVisibleTodos(this.props.testStore.visibilityFilter, persistedState.todos);
         console.log('rend', this.props.testStore);
+        console.log(isLoading);
+
         return (
             <div>
                 <input ref={node => {
@@ -45,33 +62,43 @@ class TodoApp extends Component {
                 <Footer setVisibilityFilter={this.props.setVisibilityFilter}>
 
                 </Footer>
+                <div>
+                    <button onClick={this.props.onGetPhotos}>GET PHOTOS</button>
+                    { this.props.testStore.fetchPhotos.isLoading.toString() }
+
+                </div>
+                <div>
+                    {photos.map( (item, index) =>
+                        <li key={index}>{item}</li>
+                     )}
+                </div>
             </div>
         )
     }
 }
 export default connect(
     state => ({
-        testStore: state
+        testStore: state,
     }),
     dispatch => ({
-        onAddTodo: (text, id) => {
+        onAddTodo: (text) => {
             dispatch({
                 type: 'ADD_TODO',
-                id: id,
+                id: v4(),
                 text: text
             })
         },
         onToggleTodo(id) {
-            dispatch({
-                type: 'TOGGLE_TODO',
-                id: id
-            })
+            dispatch(toggleTodo(id))
         },
         setVisibilityFilter(filter) {
             dispatch({
                 type: 'SET_VISIBILITY_FILTER',
                 filter: filter
             })
+        },
+        onGetPhotos() {
+            dispatch(getPhotos());
         }
     })
 )(TodoApp)

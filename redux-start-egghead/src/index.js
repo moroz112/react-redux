@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-// import { composeWithDevTools } from 'redux-devtools-extension'
+import { composeWithDevTools } from 'redux-devtools-extension'
 // import App from './App';
 import TodoApp from './TodoApp'
+import { saveState, loadState } from './localStorage'
+import thunk from 'redux-thunk'
 import './index.css';
 
 
@@ -27,6 +29,17 @@ const todo = (state, action) => {
         default:
             return state
     }
+};
+const INITIAL_FETCH_PHOTO_STATE = {photos: ['one photo'], isLoading: false};
+const fetchPhotos = (state = INITIAL_FETCH_PHOTO_STATE, action) => {
+  switch(action.type) {
+      case "START_FETCHING":
+          return Object.assign({},state, {isLoading: true});
+      case "FINISH_FETCHING":
+          return Object.assign({},state, action.payload);
+      default:
+          return state
+  }
 };
 const visibilityFilter = (state = 'SHOW_ALL', action) => {
   switch(action.type) {
@@ -51,7 +64,8 @@ const todos = (state = [], action) => {
 };
 const todoApp = combineReducers({
     todos,
-    visibilityFilter
+    visibilityFilter,
+    fetchPhotos
 });
 
 // const Todo = () => {
@@ -63,7 +77,7 @@ const todoApp = combineReducers({
 //     )
 // };
 
-const store = createStore(todoApp, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(todoApp, composeWithDevTools(applyMiddleware(thunk)));
 
 const render = () => {
     ReactDOM.render(
@@ -73,9 +87,13 @@ const render = () => {
             document.getElementById('root')
     );
 };
+store.subscribe( () => {
+  saveState({
+    todos: store.getState().todos
+  })
+});
+// store.subscribe(render);
 
-
-store.subscribe(render);
 render();
 
 
