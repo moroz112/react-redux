@@ -1,10 +1,19 @@
 import React, { Component } from 'react'
-
+import { Link } from 'react-router'
 
 class FilterLink extends Component {
     render() {
         return (
-            <a href="#" onClick={ () => {this.props.setVisibilityFilter(this.props.filter)}}>{this.props.children}</a>
+            <div>
+                <Link to={this.props.filter} activeStyle={
+                    {
+                        textDecoration: 'none',
+                        color: 'black'
+                    }
+                }>
+                    {this.props.children}
+                </Link>
+            </div>
         )
     }
 }

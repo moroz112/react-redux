@@ -5,7 +5,7 @@ import { loadState } from './localStorage'
 import { v4 } from 'node-uuid';
 import { toggleTodo } from './actions/TooggleTodo';
 import { getPhotos } from './actions/getPhotos';
-
+import { Link } from 'react-router'
 
 
 class TodoApp extends Component {
@@ -14,11 +14,11 @@ class TodoApp extends Component {
     }
     getVisibleTodos(filter, todos) {
         switch(filter) {
-            case "SHOW_ALL":
+            case "all":
                 return todos;
-            case "SHOW_ACTIVE":
+            case "active":
                 return todos.filter( t => !t.completed);
-            case "SHOW_COMPLETED":
+            case "completed":
                 return todos.filter( t => t.completed);
             default:
                 return todos
@@ -43,9 +43,8 @@ class TodoApp extends Component {
     render() {
         const { photos, isLoading } = this.props.testStore.fetchPhotos;
         const persistedState = loadState();
-        const visibleTodos = this.getVisibleTodos(this.props.testStore.visibilityFilter, persistedState.todos);
-        console.log('rend', this.props.testStore);
-        console.log(isLoading);
+        console.log('url', this.props.urlProps);
+        const visibleTodos = this.getVisibleTodos(this.props.urlProps.params.filter, persistedState.todos);
 
         return (
             <div>
@@ -59,13 +58,14 @@ class TodoApp extends Component {
                         textDecoration: todo.completed ? 'line-through' : 'none'
                     }}>{todo.text}</li>
                 )}
-                <Footer setVisibilityFilter={this.props.setVisibilityFilter}>
-
-                </Footer>
+                <Footer></Footer>
+                <div>
+                    <Link to={"/home"}>Home</Link>
+                    <Link to={"/about"}>About</Link>
+                </div>
                 <div>
                     <button onClick={this.props.onGetPhotos}>GET PHOTOS</button>
                     { this.props.testStore.fetchPhotos.isLoading.toString() }
-
                 </div>
                 <div>
                     {photos.map( (item, index) =>
@@ -76,10 +76,14 @@ class TodoApp extends Component {
         )
     }
 }
-export default connect(
-    state => ({
+function mapStateToProps(state, ownProps) {
+    return {
         testStore: state,
-    }),
+        urlProps: ownProps
+    }
+}
+export default connect(
+    mapStateToProps,
     dispatch => ({
         onAddTodo: (text) => {
             dispatch({

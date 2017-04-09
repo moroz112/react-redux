@@ -30,22 +30,22 @@ import NewApp from './new/containers/NewApp';
 //
 // );
 
-ReactDOM.render(
-  <NewApp/>,
-  document.getElementById('root')
-);
-
-
 // ReactDOM.render(
-//     <Provider store={store}>
-//         <Router history={history}>
-//             <Route path="/" component={App}></Route>
-//             <Route path="/about" component={About}></Route>
-//             <Route path="/tracks/:id" component={Track}></Route>
-//         </Router>
-//     </Provider>,
-//     document.getElementById('root')
+//   <NewApp/>,
+//   document.getElementById('root')
 // );
+
+
+ReactDOM.render(
+    <Provider store={store}>
+        <Router history={history}>
+            <Route path="/" component={App}></Route>
+            <Route path="/about" component={About}></Route>
+            <Route path="/tracks/:id" component={Track}></Route>
+        </Router>
+    </Provider>,
+    document.getElementById('root')
+);
 
 //
 // store.subscribe(() => {

@@ -5,6 +5,11 @@ import { Provider } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 // import App from './App';
 import TodoApp from './TodoApp'
+import About from './about'
+import { Router, Route, hashHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+import { routerReducer } from 'react-router-redux'
+
 import { saveState, loadState } from './localStorage'
 import { fetchPhotos, visibilityFilter, todos } from './reducers/reducer'
 import thunk from 'redux-thunk'
@@ -15,16 +20,20 @@ import './index.css';
 const todoApp = combineReducers({
     todos,
     visibilityFilter,
-    fetchPhotos
+    fetchPhotos,
+    routing: routerReducer
 });
 
 
 const store = createStore(todoApp, composeWithDevTools(applyMiddleware(thunk)));
+const history = syncHistoryWithStore(hashHistory, store);
 
 const render = () => {
     ReactDOM.render(
         <Provider store={store}>
-            <TodoApp/>
+            <Router history={history}>
+                <Route path="/(:filter)" component={TodoApp}></Route>
+            </Router>
         </Provider>,
             document.getElementById('root')
     );
