@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import './Dropdown.css'
 
-class Dropdown extends Component {
+export default class Dropdown extends Component {
     constructor(props) {
         super(props);
         this.state = { isOpened: false }
@@ -10,8 +11,9 @@ class Dropdown extends Component {
     }
     render() {
         console.log('isOpened', this.state.isOpened);
-        return <div onClick={this.toggleState.bind(this)}>dropdown</div>
+        return (
+            <div>dropdown</div>
+        )
     }
 
 }
-export default Dropdown;
