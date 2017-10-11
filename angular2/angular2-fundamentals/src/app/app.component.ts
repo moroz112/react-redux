@@ -8,6 +8,10 @@ import {MailService} from "./mail.service";
 })
 export class AppComponent {
   title = 'app works!';
+  onUpdate(id, text) {
+    console.log('text', text);
+    this.mail.update(id, text)
+  }
   constructor (private mail: MailService) {
 
   }
