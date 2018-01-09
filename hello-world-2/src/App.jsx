@@ -15,7 +15,7 @@ class App extends Component {
 				<button onClick={this.addTrack.bind(this)}>Submit</button>
 				<ul>
 					{this.props.testStore.map((value, index) =>
-						<li key={index}>{value}</li>
+						<li key={index}>{value.name}</li>
 					)}
 				</ul>
 			</div>
@@ -28,7 +28,11 @@ export default connect(
     }),
 	dispatch => ({
 		onAddTrack: (newTrack) => {
-			dispatch({type: 'ADD_TRACK', payload: newTrack})
+			const payload = {
+				id: Date.now().toString(),
+				name: newTrack
+			};
+			dispatch({type: 'ADD_TRACK', payload: payload})
 		}
 	})
 )(App)
