@@ -5,17 +5,27 @@ import { createStore } from 'redux';
 import App from './App';
 import './index.css';
 
+const initialState = {
+	tracks: [
+		'enter sandman',
+		'smells like'
+	],
+	playlists: [
+		'work',
+		'home'
+	]
+};
 
-function playlist(state = [], action) {
+function playlist(state = initialState, action) {
 	if (action.type === 'ADD_TRACK') {
-		return [
-			...state,
-			action.payload
-		]
+		return {
+			tracks: [...state.tracks, action.payload],
+			playlists: [...state.playlists]
+		}
 	}
 	return state;
 }
-const store = createStore(playlist);
+const store = createStore(playlist, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
 	<Provider store={store}>
@@ -23,9 +33,6 @@ ReactDOM.render(
 	</Provider>,
 	document.getElementById('root')
 );
-store.subscribe(() => {
-	console.log('subscribe', store.getState())
-});
 store.dispatch({type: 'ADD_TRACK', payload: 'some track'});
-store.dispatch({type: 'ADD_TRACK', payload: 'some track 2'});
+
 

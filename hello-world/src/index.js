@@ -16,24 +16,6 @@ import reducers from './reducers';
 
 const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)));
 const history = syncHistoryWithStore(hashHistory, store);
-import NewApp from './new/containers/NewApp';
-
-// ReactDOM.render(
-//     <Provider store={store}>
-//         <HashRouter>
-//             <div>
-//                 <Route path="/home" component={App}></Route>
-//                 <Route path="/about" component={About}></Route>
-//             </div>
-//         </HashRouter>
-//     </Provider>,
-//
-// );
-
-// ReactDOM.render(
-//   <NewApp/>,
-//   document.getElementById('root')
-// );
 
 
 ReactDOM.render(
@@ -46,14 +28,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
-
-//
-// store.subscribe(() => {
-//   console.log("subscribe", store.getState());
-// });
-//
-// const trackButton = document.querySelectorAll('.addTrack')[0];
-// trackButton.addEventListener('click', () => {
-//   const trackName = document.querySelectorAll('.trackInput')[0].value;
-//   store.dispatch({type: 'ADD_TRACK', payload: trackName});
-// });
