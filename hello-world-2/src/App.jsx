@@ -1,30 +1,43 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import { getTracks } from './actions/tracks';
 
-class App extends Component {
-	addTrack() {
-		console.log('add track', this.trackInput.value);
-		this.props.onAddTrack(this.trackInput.value);
-		this.trackInput.value = '';
-	}
-	render() {
-		console.log('component store olo ata', this.props.testStore);
-		return (
+const App = ({tracks, filterTracks, onAddTrack, onFindTrack, onGetTracks}) => {
+	let trackInput = '';
+	let searchInput = '';
+	const addTrack = () => {
+		console.log('add track', trackInput.value);
+		onAddTrack(trackInput.value);
+		trackInput.value = '';
+	};
+	const findTrack = () => {
+		onFindTrack(searchInput.value);
+		searchInput.value = '';
+	};
+	return (
+		<div>
+			<input type="text" ref={input => {trackInput = input}} />
+			<button onClick={addTrack}>Add track</button>
+			<input type="text" ref={input => {searchInput = input}} />
+			<button onClick={findTrack}>Find track</button>
 			<div>
-				<input type="text" ref={input => {this.trackInput = input}} />
-				<button onClick={this.addTrack.bind(this)}>Submit</button>
-				<ul>
-					{this.props.testStore.map((value, index) =>
-						<li key={index}>{value.name}</li>
-					)}
-				</ul>
+				<button onClick={onGetTracks}>Got tracks</button>
 			</div>
-		)
-	}
+			<ul>
+				{tracks.filter((val) => {
+					return filterTracks ? val.name.indexOf(filterTracks) >=0 : true
+				}).map((value, index) =>
+					<li key={index}>{value.name}</li>
+				)}
+			</ul>
+
+		</div>
+	)
 }
 export default connect(
     state => ({
-		testStore: state.tracks
+		tracks: state.tracks,
+	    filterTracks: state.filterTracks
     }),
 	dispatch => ({
 		onAddTrack: (newTrack) => {
@@ -33,6 +46,12 @@ export default connect(
 				name: newTrack
 			};
 			dispatch({type: 'ADD_TRACK', payload: payload})
+		},
+		onFindTrack: (name) => {
+			dispatch({type: 'FIND_TRACK', payload: name})
+		},
+		onGetTracks: () => {
+			dispatch(getTracks())
 		}
 	})
 )(App)
