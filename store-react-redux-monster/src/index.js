@@ -16,7 +16,7 @@ const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))
 
 const history = syncHistoryWithStore(browserHistory, store);
 ReactDOM.render(
-	<Provider>
+	<Provider store={store}>
 		<Router history={history}>
 			<Route component={Layout}>
 				<Route path="/" component={Phones}/>
